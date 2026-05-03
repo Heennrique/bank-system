@@ -1,42 +1,37 @@
 package com.henriquesnts.bank_system.controller;
 
-import com.henriquesnts.bank_system.model.User;
-import com.henriquesnts.bank_system.repository.UserRepository;
+import com.henriquesnts.bank_system.dto.UserRequestDto;
+import com.henriquesnts.bank_system.dto.UserResponseDto;
+import com.henriquesnts.bank_system.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.List;
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
 
-    private UserRepository userRepository;
-
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final UserService userService;
 
     @PostMapping
-    public User salvar (@RequestBody User user){
-        System.out.println("Cliente Cadastrado" + user);
+    public ResponseEntity<String> salvar(@RequestBody UserRequestDto dto) {
+        userService.saveUser(dto);
 
-        var id =UUID.randomUUID().toString();
-        user.setId(id);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Usuário cadastrado com sucesso!");
+    }
 
-        userRepository.save(user);
-        return user;
-
+    @GetMapping
+    public ResponseEntity<List<UserResponseDto>> listAll() {
+        return ResponseEntity.ok(userService.shareAllUser());
     }
 
     @GetMapping("/{id}")
-    public User buscarID (@PathVariable("id")String id) {
-     return userRepository.findById(id).orElse(null);
-
-    }
-
-    @DeleteMapping("/{id}")
-    public void deletar (@PathVariable("id")String id){
-        userRepository.deleteById(id);
+    public ResponseEntity<UserResponseDto> shareID(@PathVariable String id) {
+        return ResponseEntity.ok(userService.shareToId(id));
     }
 }

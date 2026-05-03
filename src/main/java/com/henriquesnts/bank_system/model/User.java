@@ -1,19 +1,17 @@
 package com.henriquesnts.bank_system.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity(name = "tb_users")
 public class User {
 
-
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Id
     @Column
     private String id;
 
     @Column
-    private String nome;
+    private String name;
 
     @Column
     private String cpf;
@@ -24,13 +22,13 @@ public class User {
     @Column
     private String password;
 
-    public String getNome() {
-        return nome;
+    public String getName() {
+        return name;
     }
 
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getId() {
@@ -69,7 +67,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "id='" + id + '\'' +
-                ", nome='" + nome + '\'' +
+                ", nome='" + name + '\'' +
                 ", cpf='" + cpf + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
